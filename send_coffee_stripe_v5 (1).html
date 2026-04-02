@@ -1,0 +1,493 @@
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400;500&family=Caveat:wght@400;500&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --w:#FDFAF6;--cr:#F5EFE4;--be:#E8D9C0;--bd:#C9B89A;
+  --mo:#4A5E3A;--ml:#6B7F58;--md:#2E3B24;
+  --ink:#1C1C1A;--im:#6B6860;
+  --fd:'Cormorant Garamond',Georgia,serif;--fb:'DM Sans',sans-serif;
+}
+body{background:transparent;font-family:var(--fb);color:var(--ink);}
+#app{background:var(--w);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;display:flex;flex-direction:column;max-width:390px;margin:0 auto;}
+.hdr{height:60px;flex-shrink:0;background:rgba(253,250,246,.97);border-bottom:1px solid var(--be);display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;position:relative;z-index:10;}
+.logo{display:flex;align-items:center;gap:8px;font-family:var(--fd);font-size:1.25rem;font-weight:400;color:var(--ink);background:none;border:none;cursor:pointer;}
+.si-wrap{display:flex;align-items:center;gap:6px;}
+.si{font-size:11px;letter-spacing:.08em;color:var(--bd);transition:color .2s;}
+.si.on{color:var(--mo);}
+.sd{font-size:10px;color:var(--be);}
+.scr{position:relative;overflow:hidden;}
+.pg{display:none;flex-direction:column;background:var(--w);}
+.pg.act{display:flex;}
+#ph{padding:2.5rem 1.6rem 0;position:relative;justify-content:space-between;min-height:520px;}
+.btr{position:absolute;top:-60px;right:-80px;width:280px;height:280px;background:radial-gradient(circle at 40% 40%,#E8D9C0,transparent 70%);opacity:.5;border-radius:50%;pointer-events:none;}
+.bbl{position:absolute;bottom:-40px;left:-50px;width:230px;height:230px;background:radial-gradient(circle at 60% 60%,#c5d4b0,transparent 70%);opacity:.3;border-radius:50%;pointer-events:none;}
+.hbody{position:relative;z-index:1;flex:1;display:flex;flex-direction:column;justify-content:center;padding-bottom:2.5rem;}
+.tline{display:flex;align-items:center;gap:10px;margin-bottom:1rem;}
+.tl{display:block;width:24px;height:1px;background:var(--ml);}
+.tt{font-size:10px;font-weight:400;letter-spacing:.1em;text-transform:uppercase;color:var(--ml);}
+.htit{font-family:var(--fd);font-size:clamp(3.8rem,14vw,5.5rem);font-weight:300;line-height:.9;letter-spacing:-.02em;margin-bottom:1.2rem;}
+.htit em{font-style:italic;color:var(--mo);}
+.hsub{font-size:.95rem;font-weight:300;color:var(--im);max-width:280px;line-height:1.7;margin-bottom:1.8rem;}
+.hact{display:flex;align-items:center;gap:1.4rem;}
+.hint{font-size:.75rem;color:var(--bd);}
+.fstrip{border-top:1px solid var(--be);display:flex;gap:1.4rem;padding:1rem 1.6rem;position:relative;z-index:1;}
+.fi{display:flex;align-items:center;gap:6px;}
+.fie{font-size:15px;}
+.fil{font-size:.75rem;color:var(--im);}
+.sp{padding:1.8rem 1.6rem 2.5rem;flex:1;overflow-y:auto;max-height:560px;}
+.smeta{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.8rem;}
+.bk{font-family:var(--fb);font-size:.88rem;color:var(--im);background:none;border:none;cursor:pointer;padding:4px 0;min-height:44px;display:flex;align-items:center;}
+.bk:hover{color:var(--mo);}
+.sc{font-size:.72rem;letter-spacing:.1em;color:var(--bd);}
+.sh{font-family:var(--fd);font-size:clamp(2.6rem,10vw,4rem);font-weight:300;line-height:1;letter-spacing:-.02em;margin-bottom:1.6rem;}
+.btn{display:inline-flex;align-items:center;gap:10px;background:var(--mo);color:var(--w);font-family:var(--fb);font-size:.98rem;font-weight:400;letter-spacing:.04em;padding:1rem 1.8rem;border-radius:3px;border:none;cursor:pointer;min-height:52px;transition:background .2s,gap .2s;}
+.btn:hover{background:var(--md);gap:14px;}
+.btnoff{display:inline-flex;align-items:center;gap:10px;background:var(--be);color:var(--bd);font-family:var(--fb);font-size:.98rem;padding:1rem 1.8rem;border-radius:3px;border:none;cursor:not-allowed;min-height:52px;}
+.scards{display:flex;flex-direction:column;gap:.65rem;}
+.scard{display:flex;align-items:center;justify-content:space-between;padding:1.1rem 1.2rem;background:var(--w);border:1px solid var(--be);border-radius:10px;cursor:pointer;width:100%;min-height:72px;text-align:left;transition:border-color .15s,background .15s;}
+.scard:hover{border-color:var(--ml);background:#f7f9f5;}
+.scard.on{border-color:var(--mo);background:#f0f4ec;}
+.sleft{display:flex;align-items:center;gap:12px;}
+.semo{font-size:22px;line-height:1;}
+.stxts{display:flex;flex-direction:column;gap:3px;text-align:left;}
+.slbl{font-size:1rem;font-weight:400;color:var(--ink);}
+.scard.on .slbl{color:var(--md);}
+.ssub{font-size:.8rem;font-weight:300;color:var(--im);}
+.sarr{font-size:.95rem;color:var(--bd);transition:color .15s,transform .15s;}
+.scard:hover .sarr{color:var(--mo);transform:translateX(3px);}
+.scard.on .sarr{color:var(--mo);}
+.slabel{font-size:.72rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--im);display:block;margin-bottom:.8rem;}
+.msec{margin-bottom:1.6rem;}
+.tpllist{display:flex;flex-direction:column;gap:.55rem;}
+.tplcard{display:flex;align-items:center;justify-content:space-between;gap:.65rem;padding:.95rem 1.1rem;background:var(--w);border:1px solid var(--be);border-radius:10px;cursor:pointer;text-align:left;width:100%;min-height:62px;transition:border-color .15s,background .15s;}
+.tplcard:hover{border-color:var(--ml);background:#f7f9f5;}
+.tplcard.on{border-color:var(--mo);background:#f0f4ec;}
+.tpltxt{font-size:.92rem;font-weight:300;color:var(--ink);line-height:1.4;}
+.tplcard.on .tpltxt{color:var(--md);}
+.chk{font-size:.85rem;color:var(--mo);flex-shrink:0;}
+.custom-wrap{position:relative;margin-top:.65rem;}
+.custom-ta{width:100%;padding:.95rem 1.1rem 2.2rem;font-family:var(--fb);font-size:.92rem;font-weight:300;color:var(--ink);background:var(--w);border:1px solid var(--be);border-radius:10px;resize:none;outline:none;line-height:1.5;transition:border-color .15s;}
+.custom-ta:focus{border-color:var(--ml);}
+.custom-ta::placeholder{color:var(--bd);}
+.custom-ta.on{border-color:var(--mo);background:#f0f4ec;}
+.custom-count{position:absolute;bottom:.65rem;right:.9rem;font-size:.72rem;color:var(--bd);pointer-events:none;}
+.custom-count.warn{color:#b85c38;}
+.swrow{display:flex;align-items:center;gap:.8rem;}
+.sw{width:52px;height:52px;border-radius:10px;border:1.5px solid transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;outline:none;flex-shrink:0;transition:transform .12s;}
+.sw:hover{transform:translateY(-1px);}
+.sw.on{box-shadow:0 0 0 2px var(--w),0 0 0 4px var(--mo);}
+.swck{font-size:.88rem;line-height:1;}
+.swlbls{display:flex;flex-direction:column;gap:7px;}
+.swlbl{font-size:.76rem;font-weight:300;color:var(--bd);transition:color .15s;}
+.swlbl.on{color:var(--md);font-weight:400;}
+.fontrow{display:flex;gap:.55rem;flex-wrap:wrap;}
+.fchip{padding:.72rem 1.1rem;background:var(--w);border:1px solid var(--be);border-radius:3px;cursor:pointer;font-weight:400;color:var(--ink);min-height:48px;font-size:.95rem;transition:border-color .15s,background .15s;}
+.fchip:hover{border-color:var(--ml);background:#f7f9f5;}
+.fchip.on{border-color:var(--mo);background:#f0f4ec;color:var(--md);}
+.prev{border-radius:12px;padding:1.8rem 1.5rem;min-height:115px;display:flex;align-items:center;justify-content:center;border:1px solid transparent;transition:background .25s,color .25s;}
+.prevtxt{font-size:1.05rem;font-weight:400;line-height:1.65;text-align:center;}
+.prevph{font-size:.84rem;font-weight:300;color:var(--bd);text-align:center;font-style:italic;font-family:var(--fb);}
+.sact{margin-top:1.8rem;}
+.mcards{display:flex;flex-direction:column;gap:.55rem;}
+.mcard{display:flex;align-items:center;justify-content:space-between;padding:1.1rem 1.2rem;background:var(--w);border:1px solid var(--be);border-radius:10px;cursor:pointer;width:100%;min-height:72px;transition:border-color .15s,background .15s;}
+.mcard:hover{border-color:var(--ml);background:#f7f9f5;}
+.mcard.on{border-color:var(--mo);background:#f0f4ec;}
+.mleft{display:flex;align-items:center;gap:.95rem;}
+.mico{font-size:22px;line-height:1;}
+.mlbl{font-size:1rem;font-weight:400;color:var(--ink);}
+.mcard.on .mlbl{color:var(--md);}
+.msub2{font-size:.78rem;font-weight:300;color:var(--im);}
+.radio{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--bd);flex-shrink:0;position:relative;transition:border-color .15s;}
+.radio.on{border-color:var(--mo);}
+.radio.on::after{content:'';width:10px;height:10px;border-radius:50%;background:var(--mo);position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);}
+.bdcard{border:1px solid var(--be);border-radius:10px;overflow:hidden;}
+.bdr{display:flex;align-items:center;justify-content:space-between;padding:.9rem 1.2rem;border-bottom:1px solid var(--be);transition:opacity .2s;}
+.bdr.dim{opacity:.4;}
+.bdk{font-size:.92rem;font-weight:300;color:var(--ink);}
+.bdn{font-size:.8rem;color:var(--bd);font-style:italic;}
+.bdv{font-size:.92rem;font-weight:400;color:var(--ink);}
+.bdtot{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.2rem;background:var(--cr);}
+.totlbl{font-size:.84rem;font-weight:500;letter-spacing:.04em;text-transform:uppercase;color:var(--ink);}
+.totamt{font-family:var(--fd);font-size:1.65rem;font-weight:400;color:var(--md);}
+.banner{display:flex;align-items:center;gap:1rem;padding:1.2rem 1.3rem;background:#f0f4ec;border:1px solid var(--ml);border-radius:10px;}
+.bannerIcon{font-size:26px;line-height:1;flex-shrink:0;}
+.bannerTitle{font-size:1rem;font-weight:500;color:var(--md);}
+.bannerSub{font-size:.78rem;font-weight:300;color:var(--ml);letter-spacing:.04em;margin-top:3px;}
+.giftCard{border-radius:12px;border:1px solid transparent;overflow:hidden;}
+.giftText{padding:2rem 1.6rem 1.3rem;font-size:1.08rem;font-weight:400;line-height:1.65;text-align:center;}
+.giftMeta{display:flex;align-items:center;justify-content:space-between;padding:.85rem 1.4rem;border-top:1px solid transparent;}
+.giftMetaTxt{font-family:var(--fb);font-size:.76rem;font-weight:300;opacity:.7;letter-spacing:.02em;}
+.shareGrid{display:grid;grid-template-columns:1fr 1fr;gap:.65rem;}
+.shareBtn{display:flex;align-items:center;gap:.65rem;padding:.92rem 1.1rem;background:var(--w);border:1px solid var(--be);border-radius:10px;cursor:pointer;text-decoration:none;color:var(--ink);font-family:var(--fb);font-size:.9rem;font-weight:400;min-height:52px;transition:border-color .15s,background .15s;white-space:nowrap;}
+.shareBtn:hover{border-color:var(--ml);background:#f7f9f5;color:var(--md);}
+.shareBtnIcon{display:flex;align-items:center;color:var(--im);flex-shrink:0;transition:color .15s;}
+.shareBtn:hover .shareBtnIcon{color:var(--mo);}
+.sendAgain{display:inline-flex;font-family:var(--fb);font-size:.9rem;font-weight:400;color:var(--mo);text-decoration:underline;text-underline-offset:3px;background:none;border:none;cursor:pointer;padding:.5rem 0;min-height:44px;align-items:center;}
+/* Stripe redirect overlay */
+.stripe-overlay{display:none;position:fixed;inset:0;background:rgba(253,250,246,.97);z-index:999;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem;padding:2rem;text-align:center;}
+.stripe-overlay.show{display:flex;}
+.stripe-spinner{width:36px;height:36px;border:2.5px solid var(--be);border-top-color:var(--mo);border-radius:50%;animation:spin .8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.stripe-msg{font-family:var(--fd);font-size:1.8rem;font-weight:300;color:var(--ink);}
+.stripe-sub{font-size:.82rem;font-weight:300;color:var(--im);}
+</style>
+
+<div id="app">
+  <div class="hdr">
+    <button class="logo" onclick="go('home')"><span style="font-size:16px">☕</span> Send Coffee</button>
+    <div class="si-wrap">
+      <span class="si" id="si1">01</span><span class="sd">—</span>
+      <span class="si" id="si2">02</span><span class="sd">—</span>
+      <span class="si" id="si3">03</span><span class="sd">—</span>
+      <span class="si" id="si4">04</span><span class="sd">—</span>
+      <span class="si" id="si5">05</span>
+    </div>
+  </div>
+  <div class="scr">
+    <div class="pg act" id="ph">
+      <div class="btr"></div><div class="bbl"></div>
+      <div class="hbody">
+        <div class="tline"><span class="tl"></span><span class="tt">A thoughtful gift in seconds</span></div>
+        <h1 class="htit">Send<br><em>Coffee</em></h1>
+        <p class="hsub">Send a coffee to friends around the world ☕</p>
+        <div class="hact">
+          <button class="btn" onclick="go('country')"><span>Start</span><span>→</span></button>
+          <span class="hint">No account needed</span>
+        </div>
+      </div>
+      <div class="fstrip">
+        <div class="fi"><span class="fie">🌍</span><span class="fil">Worldwide delivery</span></div>
+        <div class="fi"><span class="fie">⚡</span><span class="fil">Instant gifting</span></div>
+        <div class="fi"><span class="fie">💌</span><span class="fil">Personal note</span></div>
+      </div>
+    </div>
+    <div class="pg" id="pc">
+      <div class="sp">
+        <div class="smeta"><button class="bk" onclick="go('home')">← Home</button><span class="sc">01 / 05</span></div>
+        <h1 class="sh">Country</h1>
+        <div class="scards">
+          <button class="scard" id="ckr" onclick="pick('country','kr','brand','ckr')">
+            <div class="sleft"><span class="semo">🇰🇷</span><div class="stxts"><span class="slbl">South Korea</span><span class="ssub">Asia</span></div></div>
+            <span class="sarr">→</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="pg" id="pb">
+      <div class="sp">
+        <div class="smeta"><button class="bk" onclick="go('country')">← Country</button><span class="sc">02 / 05</span></div>
+        <h1 class="sh">Brand</h1>
+        <div class="scards">
+          <button class="scard" id="csbx" onclick="pick('brand','starbucks','product','csbx')">
+            <div class="sleft"><span class="semo">☕</span><div class="stxts"><span class="slbl">Starbucks</span><span class="ssub">Global chain</span></div></div>
+            <span class="sarr">→</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="pg" id="ppr">
+      <div class="sp">
+        <div class="smeta"><button class="bk" onclick="go('brand')">← Brand</button><span class="sc">03 / 05</span></div>
+        <h1 class="sh">Product</h1>
+        <div class="scards">
+          <button class="scard" id="clatte" onclick="pick('product','caffe-latte','message','clatte')">
+            <div class="sleft"><span class="semo">🥛</span><div class="stxts"><span class="slbl">Caffè Latte</span><span class="ssub">Starbucks</span></div></div>
+            <span class="sarr">→</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="pg" id="pm">
+      <div class="sp">
+        <div class="smeta"><button class="bk" onclick="go('product')">← Product</button><span class="sc">04 / 05</span></div>
+        <h1 class="sh">Message</h1>
+        <div class="msec">
+          <span class="slabel">Template</span>
+          <div class="tpllist" id="tpls"></div>
+          <div class="custom-wrap" style="margin-top:.75rem;">
+            <textarea class="custom-ta" id="custom-ta" rows="3" maxlength="50" placeholder="Or write your own message…" oninput="onCustomInput(this)"></textarea>
+            <span class="custom-count" id="custom-count">0 / 50</span>
+          </div>
+        </div>
+        <div class="msec">
+          <span class="slabel">Background</span>
+          <div class="swrow">
+            <button class="sw" id="sw-white" style="background:#FFF;border-color:#E8D9C0" onclick="setBg('white')"></button>
+            <button class="sw" id="sw-beige" style="background:#F5F0E8" onclick="setBg('beige')"></button>
+            <button class="sw" id="sw-moss"  style="background:#5A6B4F" onclick="setBg('moss')"></button>
+            <div class="swlbls">
+              <span class="swlbl" id="swl-white">White</span>
+              <span class="swlbl" id="swl-beige">Beige</span>
+              <span class="swlbl" id="swl-moss">Moss Green</span>
+            </div>
+          </div>
+        </div>
+        <div class="msec">
+          <span class="slabel">Font</span>
+          <div class="fontrow">
+            <button class="fchip" id="fc-sans"        style="font-family:'DM Sans',sans-serif"               onclick="setFont('sans')">Sans-serif</button>
+            <button class="fchip" id="fc-serif"       style="font-family:'Cormorant Garamond',Georgia,serif"  onclick="setFont('serif')">Serif</button>
+            <button class="fchip" id="fc-handwritten" style="font-family:'Caveat',cursive"                    onclick="setFont('handwritten')">Handwritten</button>
+          </div>
+        </div>
+        <div class="msec">
+          <span class="slabel">Preview</span>
+          <div class="prev" id="mprev" style="background:#FFF;border-color:#E8D9C0">
+            <p class="prevph" id="mprevtxt">Select a template above to preview your card</p>
+          </div>
+        </div>
+        <div class="sact" id="mact"><span class="btnoff"><span>Continue</span><span>→</span></span></div>
+      </div>
+    </div>
+    <div class="pg" id="pco">
+      <div class="sp">
+        <div class="smeta"><button class="bk" onclick="go('message')">← Message</button><span class="sc">05 / 05</span></div>
+        <h1 class="sh">Checkout</h1>
+        <div class="msec">
+          <span class="slabel">Payment method</span>
+          <div class="mcards">
+            <button class="mcard" id="mcc" onclick="setMethod()">
+              <div class="mleft"><span class="mico">💳</span><div class="stxts"><span class="mlbl">Credit Card</span><span class="msub2">Visa, Mastercard, Amex</span></div></div>
+              <span class="radio" id="radcc"></span>
+            </button>
+          </div>
+        </div>
+        <div class="msec">
+          <span class="slabel">Price breakdown</span>
+          <div class="bdcard">
+            <div class="bdr"><span class="bdk">Caffè Latte</span><span class="bdv">$5.99 CAD</span></div>
+            <div class="bdr"><span class="bdk">International service fee</span><span class="bdv">$0.50 CAD</span></div>
+            <div class="bdr dim" id="ccrow">
+              <span class="bdk">Credit card fee<span class="bdn" id="ccnote"> — select a method above</span></span>
+              <span class="bdv" id="ccval">—</span>
+            </div>
+            <div class="bdtot"><span class="totlbl">Total</span><span class="totamt" id="totamt">—</span></div>
+          </div>
+        </div>
+        <div class="sact" id="coact"><span class="btnoff"><span>Place Order</span><span>→</span></span></div>
+      </div>
+    </div>
+    <div class="pg" id="ps">
+      <div class="sp">
+        <div class="smeta"><button class="bk" onclick="reset()">← Home</button><span class="sc">06 / 06</span></div>
+        <h1 class="sh">Success</h1>
+        <div style="display:flex;flex-direction:column;gap:1.75rem;">
+          <div class="banner">
+            <span class="bannerIcon">☕</span>
+            <div><p class="bannerTitle">Your coffee is on its way!</p><p class="bannerSub" id="orderref"></p></div>
+          </div>
+          <div>
+            <span class="slabel">Gift message</span>
+            <div class="giftCard" id="giftcard">
+              <p class="giftText" id="gifttxt"></p>
+              <div class="giftMeta" id="giftmeta">
+                <span class="giftMetaTxt">☕ Caffè Latte · Starbucks</span>
+                <span class="giftMetaTxt">🇰🇷 South Korea</span>
+              </div>
+            </div>
+          </div>
+          <div>
+            <span class="slabel">Share with your friend</span>
+            <div class="shareGrid">
+              <a href="https://ig.me/m/" target="_blank" rel="noopener noreferrer" class="shareBtn">
+                <span class="shareBtnIcon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></span>
+                <span>Instagram DM</span>
+              </a>
+              <a id="walink" href="#" target="_blank" rel="noopener noreferrer" class="shareBtn">
+                <span class="shareBtnIcon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></span>
+                <span>WhatsApp</span>
+              </a>
+              <button type="button" class="shareBtn" onclick="copyText('url')">
+                <span class="shareBtnIcon" id="copylink-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></span>
+                <span id="copylink-lbl">Copy link</span>
+              </button>
+              <button type="button" class="shareBtn" onclick="copyText('msg')">
+                <span class="shareBtnIcon" id="copymsg-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg></span>
+                <span id="copymsg-lbl">Copy message</span>
+              </button>
+            </div>
+          </div>
+          <button type="button" class="sendAgain" onclick="reset()">Send another coffee →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Stripe redirect overlay (実際のサイトではStripeに飛びます) -->
+<div class="stripe-overlay" id="stripe-overlay">
+  <div class="stripe-spinner"></div>
+  <p class="stripe-msg">Stripeで決済中…</p>
+  <p class="stripe-sub">決済完了後、自動でSuccessページに戻ります</p>
+</div>
+
+<script>
+const STRIPE_LINK='https://buy.stripe.com/fZuaEQaX1f0o7PR2gr2go00';
+const PAGES=['home','country','brand','product','message','checkout','success'];
+const PID={home:'ph',country:'pc',brand:'pb',product:'ppr',message:'pm',checkout:'pco',success:'ps'};
+const SMAP={country:1,brand:2,product:3,message:4,checkout:5};
+const TMPLS=["Thanks for everything! Enjoy this coffee ☕","A little gift just for you ☕","Hope this coffee brightens your day ☕"];
+const BGHEX={white:'#FFFFFF',beige:'#F5F0E8',moss:'#5A6B4F'};
+const FONTS={sans:"'DM Sans',sans-serif",serif:"'Cormorant Garamond',Georgia,serif",handwritten:"'Caveat',cursive"};
+const CHK='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+let S={country:null,brand:null,product:null,message:null,bg:null,font:null,method:null};
+let cur='home';
+
+function go(id){
+  if(cur===id)return;
+  const prev=document.getElementById(PID[cur]);
+  const next=document.getElementById(PID[id]);
+  if(!prev||!next)return;
+  const fwd=PAGES.indexOf(id)>PAGES.indexOf(cur);
+  prev.classList.remove('act');
+  next.classList.add('act');
+  next.style.opacity='0';
+  next.style.transform=fwd?'translateX(40px)':'translateX(-40px)';
+  if(next.querySelector('.sp'))next.querySelector('.sp').scrollTop=0;
+  requestAnimationFrame(()=>{
+    next.style.transition='opacity .25s ease,transform .25s ease';
+    next.style.opacity='1';next.style.transform='translateX(0)';
+    setTimeout(()=>{next.style.transition='';next.style.transform='';next.style.opacity='';},270);
+  });
+  cur=id;updSI();
+}
+function pick(f,v,nxt,cid){
+  S[f]=v;
+  document.querySelectorAll('.scard').forEach(c=>c.classList.remove('on'));
+  document.getElementById(cid).classList.add('on');
+  setTimeout(()=>go(nxt),120);
+}
+function updSI(){
+  const idx=SMAP[cur];
+  for(let i=1;i<=5;i++)document.getElementById('si'+i).classList.toggle('on',i===idx);
+}
+function initTpls(){
+  const c=document.getElementById('tpls');
+  if(!c||c.children.length)return;
+  TMPLS.forEach(t=>{
+    const b=document.createElement('button');
+    b.className='tplcard';
+    b.innerHTML=`<span class="tpltxt">${t}</span><span class="chk" style="display:none">✓</span>`;
+    b.onclick=()=>selTpl(t,b);
+    c.appendChild(b);
+  });
+}
+function selTpl(t,btn){
+  S.message=t;
+  document.querySelectorAll('.tplcard').forEach(c=>{c.classList.remove('on');c.querySelector('.chk').style.display='none';});
+  btn.classList.add('on');btn.querySelector('.chk').style.display='';
+  const ta=document.getElementById('custom-ta');
+  ta.value='';ta.classList.remove('on');
+  document.getElementById('custom-count').textContent='0 / 50';
+  updPrev();updMsgBtn();
+}
+function onCustomInput(ta){
+  const v=ta.value;const len=v.length;
+  const cnt=document.getElementById('custom-count');
+  cnt.textContent=len+' / 50';cnt.classList.toggle('warn',len>=45);
+  if(v.trim().length>0){
+    S.message=v.trim();ta.classList.add('on');
+    document.querySelectorAll('.tplcard').forEach(c=>{c.classList.remove('on');c.querySelector('.chk').style.display='none';});
+  } else {S.message=null;ta.classList.remove('on');}
+  updPrev();updMsgBtn();
+}
+function setBg(v){
+  S.bg=v;
+  ['white','beige','moss'].forEach(k=>{
+    const sw=document.getElementById('sw-'+k);
+    sw.classList.toggle('on',k===v);
+    sw.innerHTML=k===v?`<span class="swck" style="color:${v==='moss'?'#fff':'#2F3E2E'}">✓</span>`:'';
+    document.getElementById('swl-'+k).classList.toggle('on',k===v);
+  });
+  updPrev();updMsgBtn();
+}
+function setFont(v){
+  S.font=v;
+  ['sans','serif','handwritten'].forEach(k=>document.getElementById('fc-'+k).classList.toggle('on',k===v));
+  updPrev();updMsgBtn();
+}
+function updPrev(){
+  const p=document.getElementById('mprev');const t=document.getElementById('mprevtxt');
+  const bg=BGHEX[S.bg||'white'];const tc=S.bg==='moss'?'#FFFFFF':'#2F3E2E';const ff=FONTS[S.font||'sans'];
+  p.style.background=bg;p.style.borderColor=S.bg==='white'?'#E8D9C0':'transparent';p.style.color=tc;
+  if(S.message){t.className='prevtxt';t.style.fontFamily=ff;t.style.color=tc;t.textContent=S.message;}
+  else{t.className='prevph';t.style.fontFamily='';t.style.color='';t.textContent='Select a template above to preview your card';}
+}
+function updMsgBtn(){
+  const a=document.getElementById('mact');
+  a.innerHTML=S.message&&S.bg&&S.font
+    ?'<button class="btn" onclick="go(\'checkout\')"><span>Continue</span><span>→</span></button>'
+    :'<span class="btnoff"><span>Continue</span><span>→</span></span>';
+}
+function setMethod(){
+  S.method='credit_card';
+  document.getElementById('mcc').classList.add('on');document.getElementById('radcc').classList.add('on');
+  document.getElementById('ccrow').classList.remove('dim');document.getElementById('ccnote').style.display='none';
+  document.getElementById('ccval').textContent='$0.50 CAD';document.getElementById('totamt').textContent='$6.99 CAD';
+  document.getElementById('coact').innerHTML='<button class="btn" onclick="goStripe()"><span>Pay $6.99 CAD</span><span>→</span></button>';
+}
+function goStripe(){
+  // 実際のサイト: localStorage に pending フラグを保存 → Stripe Payment Link へリダイレクト
+  // このプロトタイプではStripeページに実際に飛んだあと、戻ってきたらSuccessを表示するシミュレーション
+  try{ localStorage.setItem('sc_pending_payment','true'); }catch(e){}
+
+  // プロトタイプ内ではオーバーレイを表示して3秒後にSuccessへ (実際はStripeへ飛ぶ)
+  document.getElementById('stripe-overlay').classList.add('show');
+  setTimeout(()=>{
+    document.getElementById('stripe-overlay').classList.remove('show');
+    showSuccess();
+  }, 3000);
+
+  // 実際のデプロイ時はこの1行に差し替え:
+  // window.location.href = STRIPE_LINK;
+}
+function showSuccess(){
+  const sid='CS_'+Math.random().toString(36).slice(2,10).toUpperCase();
+  document.getElementById('orderref').textContent='Order · '+sid;
+  const gc=document.getElementById('giftcard');
+  const bg=BGHEX[S.bg||'white'];const tc=S.bg==='moss'?'#FFFFFF':'#2F3E2E';const ff=FONTS[S.font||'sans'];
+  gc.style.cssText=`background:${bg};border-color:${S.bg==='white'?'#E8D9C0':'transparent'};color:${tc};font-family:${ff};border-radius:12px;overflow:hidden;`;
+  document.getElementById('gifttxt').textContent=S.message||'A little gift just for you ☕';
+  document.getElementById('giftmeta').style.borderTopColor=S.bg==='moss'?'rgba(255,255,255,0.2)':'rgba(47,62,46,0.12)';
+  document.getElementById('walink').href='https://wa.me/?text='+encodeURIComponent((S.message||'A little gift just for you ☕')+' https://sendcoffee.app');
+  go('success');
+}
+function copyText(type){
+  const text=type==='url'?'https://sendcoffee.app':(S.message||'A little gift just for you ☕');
+  const lbl=document.getElementById('copy'+type+'-lbl');const ico=document.getElementById('copy'+type+'-ico');
+  const ol=lbl.textContent;const oi=ico.innerHTML;
+  navigator.clipboard.writeText(text).catch(()=>{}).finally(()=>{
+    lbl.textContent='Copied!';ico.innerHTML=CHK;
+    setTimeout(()=>{lbl.textContent=ol;ico.innerHTML=oi;},2000);
+  });
+}
+function reset(){
+  S={country:null,brand:null,product:null,message:null,bg:null,font:null,method:null};
+  try{localStorage.removeItem('sc_pending_payment');}catch(e){}
+  document.querySelectorAll('.scard').forEach(c=>c.classList.remove('on'));
+  document.querySelectorAll('.tplcard').forEach(c=>{c.classList.remove('on');const ch=c.querySelector('.chk');if(ch)ch.style.display='none';});
+  const ta=document.getElementById('custom-ta');if(ta){ta.value='';ta.classList.remove('on');}
+  const cnt=document.getElementById('custom-count');if(cnt)cnt.textContent='0 / 50';
+  ['white','beige','moss'].forEach(k=>{document.getElementById('sw-'+k).classList.remove('on');document.getElementById('sw-'+k).innerHTML='';document.getElementById('swl-'+k).classList.remove('on');});
+  ['sans','serif','handwritten'].forEach(k=>document.getElementById('fc-'+k).classList.remove('on'));
+  document.getElementById('mcc').classList.remove('on');document.getElementById('radcc').classList.remove('on');
+  document.getElementById('ccrow').classList.add('dim');document.getElementById('ccnote').style.display='';
+  document.getElementById('ccval').textContent='—';document.getElementById('totamt').textContent='—';
+  document.getElementById('mact').innerHTML='<span class="btnoff"><span>Continue</span><span>→</span></span>';
+  document.getElementById('coact').innerHTML='<span class="btnoff"><span>Place Order</span><span>→</span></span>';
+  updPrev();go('home');
+}
+
+// Stripeから戻ってきたときの検知 (実際のサイト用)
+try{
+  if(localStorage.getItem('sc_pending_payment')==='true'){
+    localStorage.removeItem('sc_pending_payment');
+    setTimeout(()=>showSuccess(),100);
+  }
+}catch(e){}
+
+document.getElementById('ccrow').classList.add('dim');
+initTpls();updSI();
+new MutationObserver(()=>{if(document.getElementById('pm').classList.contains('act'))initTpls();})
+  .observe(document.getElementById('pm'),{attributes:true,attributeFilter:['class']});
+</script>
